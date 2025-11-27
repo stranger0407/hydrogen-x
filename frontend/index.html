@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrogen X - Signup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="header">
+                <h1>Hydrogen <span class="x-logo">X</span></h1>
+                <h2>Sign Up</h2>
+            </div>
+
+            <form id="signupForm">
+                <div class="form-container">
+                    <!-- Left Column -->
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Enter username" required>
+                            <span class="helper-text">Use email id or provided username</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter email" required>
+                            <span class="helper-text">Use email id or provided username</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company">Company Profile</label>
+                            <input type="text" id="company" name="companyProfile" placeholder="Enter company name">
+                            <span class="helper-text">Use email id or provided username</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <input type="url" id="website" name="website" placeholder="Enter website URL">
+                            <span class="helper-text">Use email id or provided username</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="brochure">Brochure</label>
+                            <input type="text" id="brochure" name="brochure" placeholder="Enter brochure info">
+                            <span class="helper-text">Use email id or provided username</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact">Customer Care Contact</label>
+                            <input type="tel" id="contact" name="customerCareContact" placeholder="Enter contact number">
+                            <span class="helper-text">Use email id or provided username</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerType">Customer Type</label>
+                            <select id="customerType" name="customerType">
+                                <option value="">Select Customer Type</option>
+                                <option value="Supplier">Supplier</option>
+                                <option value="Customer">Customer</option>
+                            </select>
+                            <span class="helper-text">Use email id or provided username</span>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="robot" name="robot" required>
+                            <label for="robot" class="checkbox-label">I'm not a robot</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-signup">Sign Up</button>
+                <div id="message" class="message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value,
+                companyProfile: document.getElementById('company').value,
+                website: document.getElementById('website').value,
+                brochure: document.getElementById('brochure').value,
+                customerCareContact: document.getElementById('contact').value,
+                customerType: document.getElementById('customerType').value
+            };
+
+            const messageDiv = document.getElementById('message');
+
+            try {
+                const response = await fetch('http://localhost:8080/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageDiv.textContent = '✓ ' + data.message;
+                    messageDiv.className = 'message success';
+                    document.getElementById('signupForm').reset();
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                } else {
+                    messageDiv.textContent = '✗ ' + data.message;
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                messageDiv.textContent = '✗ Error: ' + error.message;
+                messageDiv.className = 'message error';
+            }
+        });
+    </script>
+</body>
+</html>

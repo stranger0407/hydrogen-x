@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrogen X - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Image Section -->
+        <div class="image-section">
+            <img src="image.png" alt="logo">
+        </div>
+
+        <!-- Signup Form Section -->
+        <div class="form-section">
+            <h1 class="logo">Hydrogen <span>X</span></h1>
+            <h2 class="signup-title">Sign up</h2>
+
+            <form id="signupForm">
+                <!-- Row 1 -->
+                <div class="row">
+                    <div class="col">
+                        <label for="username">Username</label>
+                        <input id="username" type="text" placeholder="Enter Username" required>
+                        <span class="helper-text">Use email id or provided username</span>
+                    </div>
+                    <div class="col">
+                        <label for="company">Company Profile</label>
+                        <input id="company" type="text" placeholder="Enter your company profile">
+                        <span class="helper-text">Use email id or provided username</span>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="row">
+                    <div class="col">
+                        <label for="email">Email ID</label>
+                        <input id="email" type="email" placeholder="Enter Email Id" required>
+                        <span class="helper-text">Use email id or provided username</span>
+                    </div>
+                    <div class="col">
+                        <label for="website">Website</label>
+                        <input id="website" type="url" placeholder="Enter your website">
+                        <span class="helper-text">Use email id or provided username</span>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row">
+                    <div class="col">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" placeholder="Enter password" required>
+                    </div>
+                    <div class="col">
+                        <label for="brochure">Brochure</label>
+                        <input id="brochure" type="text" placeholder="Enter your Brochure">
+                        <span class="helper-text">Use email id or provided username</span>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="row">
+                    <div class="col">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input id="confirm-password" type="password" placeholder="Enter Confirm Password" required>
+                    </div>
+                    <div class="col">
+                        <label for="contact">Customer Care Contact</label>
+                        <input id="contact" type="text" placeholder="Enter customer care contact details">
+                        <span class="helper-text">Use email id or provided username</span>
+                    </div>
+                </div>
+
+                <!-- Row 5 - Role Selection -->
+                <div class="row">
+                    <div class="col">
+                        <label for="customer-type">Customer Type</label>
+                        <select id="customer-type" class="customer-type-select" required>
+                            <option value="">Select Customer Type</option>
+                            <option value="Supplier">Supplier</option>
+                            <option value="Customer">Customer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Captcha in center -->
+                <div class="captcha">
+                    <input type="checkbox" id="robot" required>
+                    <label for="robot">I'm not a Robot</label>
+                </div>
+
+                <!-- Submit Button in center -->
+                <button type="submit" class="signup-btn">Sign up</button>
+            </form>
+
+            <!-- Success/Error Message -->
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_BASE_URL = 'http://localhost:8080/api';
+
+        // Get form element
+        const signupForm = document.getElementById('signupForm');
+        const messageDiv = document.getElementById('message');
+
+        // Form submit handler
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const companyProfile = document.getElementById('company').value;
+            const website = document.getElementById('website').value;
+            const brochure = document.getElementById('brochure').value;
+            const customerCareContact = document.getElementById('contact').value;
+            const customerType = document.getElementById('customer-type').value;
+            const robot = document.getElementById('robot').checked;
+
+            // Validate captcha
+            if (!robot) {
+                showMessage('Please check the "I\'m not a Robot" checkbox', 'error');
+                return;
+            }
+
+            // Prepare request body
+            const userData = {
+                username: username,
+                email: email,
+                password: password,
+                confirmPassword: confirmPassword,
+                companyProfile: companyProfile,
+                website: website,
+                brochure: brochure,
+                customerCareContact: customerCareContact,
+                customerType: customerType
+            };
+
+            try {
+                // Show loading state
+                const submitBtn = signupForm.querySelector('.signup-btn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Signing up...';
+
+                // Make API request
+                const response = await fetch(`${API_BASE_URL}/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showMessage('Registration successful! Redirecting...', 'success');
+                    // Reset form
+                    signupForm.reset();
+                    // Redirect after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                } else {
+                    showMessage(data.message || 'Registration failed', 'error');
+                }
+
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign up';
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error: ' + error.message, 'error');
+                const submitBtn = signupForm.querySelector('.signup-btn');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign up';
+            }
+        });
+
+        // Show message function
+        function showMessage(message, type) {
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+
+            // Hide message after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>

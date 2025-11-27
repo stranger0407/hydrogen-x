@@ -1,0 +1,93 @@
+# Node
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+
+# Angular / build output
+dist/
+/out-tsc/
+.angular/
+.cache/
+/tmp/
+
+# Logs
+logs
+*.log
+
+# Environment
+.env
+.env.*
+
+# TypeScript
+*.tsbuildinfo
+
+# IDEs and editors
+.vscode/
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Java / Maven
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven wrapper files
+.mvn/
+
+# Built application files
+build/
+coverage/
+
+# Documentation/Report Files
+ANGULAR_COMPLETE.md
+ANGULAR_ERROR_FIX_CHECKLIST.md
+ANGULAR_FIXES_COMPLETE.md
+ANGULAR_FRONTEND_SUMMARY.md
+ANGULAR_SETUP.md
+ANGULAR_TYPESCRIPT_ERROR_REPORT.md
+COMPLETION_REPORT.md
+IMPORT_ERROR_EXPLANATION.md
+IMPORT_PATH_VERIFICATION.md
+ORGANIZATION_SUMMARY.md
+PROJECT_COMPLETION_CERTIFICATE.md
+PROJECT_SUMMARY.md
+QUICK_START.md
+SETUP_INSTRUCTIONS.md
+TESTING_GUIDE.md
+TYPESCRIPT_ERROR_CHECK_COMPLETE.md
+
+# Ignore frontend-specific generated folders
+angular-frontend/dist/
+angular-frontend/.angular/
+
+# Ignore backend build artifacts
+backend/target/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# End of .gitignore
